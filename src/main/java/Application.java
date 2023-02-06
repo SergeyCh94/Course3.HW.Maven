@@ -11,7 +11,7 @@ public class Application {
         try (final Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM employee WHERE id = (?)")) {
 
-            statement.setInt(1, 6);
+            statement.setInt(1, 4);
 
             final ResultSet resultSet = statement.executeQuery();
 
