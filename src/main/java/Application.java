@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application {
 
@@ -8,24 +10,30 @@ public class Application {
         final String password = "160894Sveta";
         final String url = "jdbc:postgresql://localhost:5432/skypro";
 
-        try (final Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM employee WHERE id = (?)")) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
 
-            statement.setInt(1, 4);
+            // Создаем объект класса EmployeeDAOImpl
+            EmployeeDAO employeeDAO = new EmployeeDAOImpl(connection);
 
-            final ResultSet resultSet = statement.executeQuery();
+            City city1 = new City(1, "Gomel");
+            City city2 = new City(2, "Minsk");
+            City city3 = new City(3, "Moscow");
+            Employee employee1 = new Employee(1, "Ivan", "Ivanov", "Male", 29, 1);
 
-            while (resultSet.next()) {
-                String firstName = "First Name: " + resultSet.getString("first_name");
-                String lastName = "Last Name: " + resultSet.getString("last_name");
-                String gender = "Gender: " + resultSet.getString("gender");
-                String city = "City: " + resultSet.getString("city_id");
+            // Вызываем метод добавления объекта
+            employeeDAO.addEmployee(employee1);
 
-                System.out.println(firstName);
-                System.out.println(lastName);
-                System.out.println(gender);
-                System.out.println(city);
+            employeeDAO.deleteEmployee(19);
+
+            // Создаем список наполняя его объектами, которые получаем
+            // путем вызова метода для получения всех элементов таблицы
+            List<Employee> list = new ArrayList<>(employeeDAO.getAllEmployees());
+
+            // Выведем список в консоль
+            for (Employee employee : list) {
+                System.out.println(employee);
             }
+
         }
     }
 }
