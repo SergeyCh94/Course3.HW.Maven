@@ -8,7 +8,6 @@ import java.util.Objects;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "first_name")
@@ -17,25 +16,24 @@ public class Employee {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "gender")
-    private String gender;
-
-    @Column(name = "age")
     private int age;
 
-    @Column(name = "city_id")
-    private int city;
+    private String gender;
 
-    public Employee(){
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
+    private City city;
 
-    public Employee(int id, String firstName, String lastName, String gender, int age, int city) {
+    public Employee(int id, String firstName, String lastName, int age, String gender, City city) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.gender = gender;
         this.age = age;
+        this.gender = gender;
         this.city = city;
+    }
+
+    public Employee() {
     }
 
     public int getId() {
@@ -62,14 +60,6 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
     public int getAge() {
         return age;
     }
@@ -78,11 +68,19 @@ public class Employee {
         this.age = age;
     }
 
-    public int getCity() {
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public City getCity() {
         return city;
     }
 
-    public void setCity(int city) {
+    public void setCity(City city) {
         this.city = city;
     }
 
@@ -91,12 +89,12 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return id == employee.id && age == employee.age && city == employee.city && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(gender, employee.gender);
+        return id == employee.id && age == employee.age && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(gender, employee.gender) && Objects.equals(city, employee.city);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, gender, age, city);
+        return Objects.hash(id, firstName, lastName, age, gender, city);
     }
 
     @Override
@@ -105,8 +103,8 @@ public class Employee {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", gender='" + gender + '\'' +
                 ", age=" + age +
+                ", gender='" + gender + '\'' +
                 ", city=" + city +
                 '}';
     }

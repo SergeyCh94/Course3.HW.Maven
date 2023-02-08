@@ -2,27 +2,16 @@ package dao;
 
 import config.HibernateUtil;
 import model.Employee;
-
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-    private SessionFactory sessionFactory;
-
-    public EmployeeDAOImpl() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-    }
-
     @Override
     public void addEmployee(Employee employee) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             session.save(employee);
             transaction.commit();
@@ -46,6 +35,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             Transaction transaction = session.beginTransaction();
             session.update(employee);
+            session.flush();
             transaction.commit();
         }
     }
@@ -59,5 +49,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         }
     }
 }
+
 
 
