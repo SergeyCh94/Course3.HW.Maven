@@ -1,50 +1,49 @@
 package model;
 
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@Table(name = "city")
 public class City {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
+    private String city_name;
 
-    public City(int id, String name) {
-        this.id = id;
-        this.name = name;
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Employee> employees = new ArrayList<>();
+
+    public City(String city_name) {
+        this.city_name = city_name;
     }
 
-    public int getId() {
+    public City() {
+
+    }
+
+    public int getCity_id() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCity_id(int city_id) {
+        this.id = city_id;
     }
 
-    public String getName() {
-        return name;
+    public String getCity_name() {
+        return city_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCity_name(String city_name) {
+        this.city_name = city_name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        City city = (City) o;
-        return id == city.id && name.equals(city.name);
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
-
-    @Override
-    public String toString() {
-        return "model.City{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }
